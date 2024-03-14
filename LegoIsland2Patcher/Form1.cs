@@ -1,19 +1,13 @@
 ﻿using System;
 using System.IO;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Diagnostics;
+using static LegoIsland2Patcher.Utilities;
 
 namespace LegoIsland2Patcher
-{ 
-
-    public partial class Form1 : Form
+{
+	public partial class Form1 : Form
     {
         public Form1()
         {
@@ -22,8 +16,7 @@ namespace LegoIsland2Patcher
 
         //Global values
         exeVersion exeData; //Holds names and offsets that change depending on the game version
-        List<modinfo> mods = new List<modinfo>(); //List containing mod data      
-
+        List<modinfo> mods = new List<modinfo>(); //List containing mod data
 
         //Program start
         private void programStart()
@@ -63,7 +56,6 @@ namespace LegoIsland2Patcher
                 lblExeVersion.Text = "No game file found.";
             }
         }
-
 
         //Figure out which version of the game the user has
         private void identifyVersion()
@@ -126,7 +118,6 @@ namespace LegoIsland2Patcher
             //Rename label
             lblExeVersion.Text = exeData.label;
         }
-
         
         //Create a backup exe if one does not exist
         private void backupExe()
@@ -136,8 +127,7 @@ namespace LegoIsland2Patcher
             if (!File.Exists(backupName)) {
                 File.WriteAllBytes(backupName, File.ReadAllBytes(exeData.exeName));
             }
-        }       
-
+        }
 
         private void installPatch(string location)
         {
@@ -367,8 +357,6 @@ namespace LegoIsland2Patcher
            
         }
 
-
-
         private void installMod(string location)
         {
             if (Directory.Exists(location + "/_data"))
@@ -487,6 +475,7 @@ namespace LegoIsland2Patcher
             for (int i = 0; i < length; i++)
             {
                 byte thisbyte = 0;
+
                 if (i <= bytes.Length)
                 {
                     thisbyte = bytes[i];
@@ -516,7 +505,6 @@ namespace LegoIsland2Patcher
                 File.WriteAllBytes(exeData.exeName, virtualReal);
             }
         }
-
 
         private void applyLoadFix()
         {
@@ -583,24 +571,6 @@ namespace LegoIsland2Patcher
             result.loadOffset = loadOff;
 
             return result;
-        }
-
-
-        //Check if a series of bytes exist in a file
-        private bool bytesMatch(string filename, long offset, byte[] bytes)
-        {
-            bool match = true;
-            byte[] virtualFile = File.ReadAllBytes(filename);
-
-            for (int i = 0; i < bytes.Length; i++)
-            {
-                if (virtualFile[offset + i] != bytes[i])
-                {
-                    match = false;
-                }
-            }
-
-            return match;
         }
 
 
@@ -718,13 +688,12 @@ namespace LegoIsland2Patcher
             }
         }
 
-
         //Check load fix box
         private void checkLoadFix()
         {
             byte[] nullBytes = { 0xC3, 0x90, 0x90, 0x90, 0x90, 0x90 };
 
-            if (bytesMatch(exeData.exeName, exeData.loadOffset, nullBytes) == true)
+            if (BytesMatch(exeData.exeName, exeData.loadOffset, nullBytes) == true)
             {
                 cbLoadFix.Checked = true;
             }
@@ -802,7 +771,7 @@ namespace LegoIsland2Patcher
 
             foreach (long off in offsets)
             {
-                if (bytesMatch(exeData.exeName, off, nullBytes) == false)
+                if (BytesMatch(exeData.exeName, off, nullBytes) == false)
                 {
                     patchApplied = false;
                 }
@@ -810,82 +779,6 @@ namespace LegoIsland2Patcher
 
             cbNoVideos.Checked = patchApplied;
         }
-
-//-----------Conversion functions------------
-        //Returns 0 if the string is not a number or less than zero
-        private int StringToInt(String s)
-        {
-            if (s.All(char.IsDigit) == true)
-            {
-                int result = Int32.Parse(s);
-
-                if (result > 0)
-                {
-                    return result;
-                }
-            }
-
-            return 0;
-        }
-
-
-        private long HexToLong(string hex)
-        {
-            hex = hex.Trim();
-
-            long result = 0;
-            char[] hexchars = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
-
-            int position = 0;
-            for (int i = hex.Length - 1; i >= 0; i--)
-            {
-                int convert = 0;
-
-                for (int place = 0; place < 16; place++)
-                {
-                    if (Char.ToLower(hex[i]) == hexchars[place])
-                    {
-                        convert = place;
-                        place = 16;
-                    }
-                }
-
-                result += convert * (int)Math.Pow(16, position);
-
-                position += 1;
-            }
-
-            return result;
-        }
-
-
-        private byte[] ToBytes(string raw)
-        {
-            raw = raw.Trim();
-
-            if (raw == "")
-            {
-                return null;
-            }
-            else
-            {
-                if (raw.Length % 2 != 0)
-                {
-                    raw = '0' + raw;
-                }
-
-                int numofbytes = raw.Length / 2;
-                byte[] result = new byte[numofbytes];
-
-                for (int i = 0; i < raw.Length; i += 2)
-                {
-                    result[i / 2] = (byte)HexToLong(Char.ToString(raw[i]) + Char.ToString(raw[i + 1]));
-                }
-
-                return result;
-            }
-        }
-
 
         private void Form1_Load(object sender, EventArgs e)
         {
