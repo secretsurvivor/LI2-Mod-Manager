@@ -12,12 +12,12 @@ namespace LegoIsland2Patcher.Mods
 			Patch.ApplyPatch(legoIsland, nullBytes, legoIsland.Version.LoadOffset);
 		}
 
-		public bool Exist(LegoIslandExe legoIsland, Backup backup)
+		public bool Exist(LegoIslandExe legoIsland, BackupExe backup)
 		{
 			return BytesMatch(legoIsland, legoIsland.Version.LoadOffset, nullBytes);
 		}
 
-		public void RemoveModification(LegoIslandExe legoIsland, Backup backup)
+		public void RemoveModification(LegoIslandExe legoIsland, BackupExe backup)
 		{
 			Patch.RemovePatch(legoIsland, backup, legoIsland.Version.LoadOffset, nullBytes.Length);
 		}

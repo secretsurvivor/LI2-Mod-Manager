@@ -1,13 +1,12 @@
 ﻿using LegoIsland2Patcher.Base;
 using System;
 using System.IO;
-using System.Xml.Linq;
 
 namespace LegoIsland2Patcher.Mods
 {
 	public class Resolution : IModification
 	{
-		public static Resolution GetCurrentResolution(LegoIslandExe legoIsland, Backup backup)
+		public static Resolution GetCurrentResolution(LegoIslandExe legoIsland, BackupExe backup)
 		{
 			var res = new Resolution();
 
@@ -18,7 +17,7 @@ namespace LegoIsland2Patcher.Mods
 
 		public long Height { get; set; }
 		public long Width { get; set; }
-		public bool CustomAspect { get; set; }
+		public bool CustomAspect { get; set; } = false;
 
 		public (long[] Width, long[] Height) GenerateResolutionOffsets(LegoIslandExe legoIsland)
 		{
@@ -58,7 +57,7 @@ namespace LegoIsland2Patcher.Mods
 			Patch.ApplyPatch(legoIsland, BitConverter.GetBytes(customAspect), legoIsland.Version.FovOffset);
 		}
 
-		public void RemoveModification(LegoIslandExe legoIsland, Backup backup)
+		public void RemoveModification(LegoIslandExe legoIsland, BackupExe backup)
 		{
 			var (resOffsetW, resOffsetH) = GenerateResolutionOffsets(legoIsland);
 
@@ -71,7 +70,7 @@ namespace LegoIsland2Patcher.Mods
 			Patch.RemovePatch(legoIsland, backup, legoIsland.Version.FovOffset, 4);
 		}
 
-		public bool Exist(LegoIslandExe legoIsland, Backup backup)
+		public bool Exist(LegoIslandExe legoIsland, BackupExe backup)
 		{
 			var (resOffsetW, resOffsetH) = GenerateResolutionOffsets(legoIsland);
 

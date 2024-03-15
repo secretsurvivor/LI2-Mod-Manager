@@ -1,4 +1,7 @@
-﻿using System.IO;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using static LegoIsland2Patcher.Utilities;
 
 namespace LegoIsland2Patcher.Base
@@ -19,25 +22,35 @@ namespace LegoIsland2Patcher.Base
 		{
 			var (InfoPath, DataPath, PatchPath, InstalledPath) = ModPaths(directory);
 
-			if (!File.Exists(InfoPath))
-			{
-				return null;
-			}
-
-			string[] info = File.ReadAllLines(InfoPath);
-
 			var mod = new Modification()
 			{
-				Name = info[0],
-				Author = info[1],
-				Description = info[2],
 				Installed = File.Exists(InstalledPath)
 			};
+
+			if (File.Exists(InfoPath))
+			{
+				string[] info = File.ReadAllLines(InfoPath);
+
+				mod.Name = info[0];
+				mod.Author = info[1];
+				mod.Description = info[2];
+			}
+			else
+			{
+				// Use folder name as Mod name
+				mod.Name = Path.GetFileName(Path.GetDirectoryName(directory));
+				mod.Author = "Unknown";
+				mod.Description = "No description available.";
+			}
+
+			int validCounter = 0;
 
 			if (File.Exists(DataPath))
 			{
 				mod.HasData = true;
 				mod.DataPath = DataPath;
+
+				validCounter++;
 			}
 
 			if (File.Exists(PatchPath))
@@ -52,9 +65,38 @@ namespace LegoIsland2Patcher.Base
 				{
 					mod.Originals = ToBytes(data[2]);
 				}
+
+				validCounter++;
+			}
+
+			if (validCounter < 1)
+			{ // Invalid Mod
+				return null;
 			}
 
 			return mod;
+		}
+
+		public static IList<Modification> GetAvailableMods()
+		{
+			if (!Directory.Exists("mods"))
+			{
+				return new List<Modification>();
+			}
+
+			var modList = new List<Modification>();
+
+			foreach (var dir in Directory.GetDirectories("mods"))
+			{
+				var mod = GetModification(dir);
+
+				if (mod != null)
+				{
+					modList.Add(mod);
+				}
+			}
+
+			return modList;
 		}
 
 		public string Name { get; set; }
@@ -81,9 +123,14 @@ namespace LegoIsland2Patcher.Base
 					fs.WriteByte(p);
 				}
 			}
+
+			if (HasData)
+			{
+				// TODO: Apply _data packages
+			}
 		}
 
-		public void RemoveModification(LegoIslandExe legoIsland, Backup backup)
+		public void RemoveModification(LegoIslandExe legoIsland, BackupExe backup)
 		{
 			if (HasPatch)
 			{
@@ -97,9 +144,14 @@ namespace LegoIsland2Patcher.Base
 					fs.WriteByte((byte)bck.ReadByte());
 				}
 			}
+
+			if (HasData)
+			{
+				// TODO: Remove _data packages
+			}
 		}
 
-		public bool Exist(LegoIslandExe legoIsland, Backup backup)
+		public bool Exist(LegoIslandExe legoIsland, BackupExe backup)
 		{
 			return Installed;
 		}

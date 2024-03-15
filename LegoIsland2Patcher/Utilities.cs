@@ -2,6 +2,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Windows.Forms;
 
 namespace LegoIsland2Patcher
 {
@@ -139,6 +140,25 @@ namespace LegoIsland2Patcher
 					return true;
 				}
 			}
+
+			return false;
+		}
+
+		public static bool ShowFolderBrowserDialog(string message, out string selectedPath)
+		{
+			using var dialog = new FolderBrowserDialog();
+
+			dialog.Description = message;
+			DialogResult result = dialog.ShowDialog();
+
+			if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(dialog.SelectedPath))
+			{
+				selectedPath = dialog.SelectedPath;
+
+				return true;
+			}
+
+			selectedPath = null;
 
 			return false;
 		}

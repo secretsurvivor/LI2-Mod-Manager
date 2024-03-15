@@ -9,7 +9,7 @@ namespace LegoIsland2Patcher.Base
 	public interface IModification
 	{
 		void ApplyModification(LegoIslandExe legoIsland);
-		void RemoveModification(LegoIslandExe legoIsland, Backup backup);
-		bool Exist(LegoIslandExe legoIsland, Backup backup);
+		void RemoveModification(LegoIslandExe legoIsland, BackupExe backup);
+		bool Exist(LegoIslandExe legoIsland, BackupExe backup);
 	}
 }

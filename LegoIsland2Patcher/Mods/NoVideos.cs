@@ -19,7 +19,7 @@ namespace LegoIsland2Patcher.Mods
 			}
 		}
 
-		public bool Exist(LegoIslandExe legoIsland, Backup backup)
+		public bool Exist(LegoIslandExe legoIsland, BackupExe backup)
 		{
 			foreach (long offset in offsets)
 			{
@@ -32,7 +32,7 @@ namespace LegoIsland2Patcher.Mods
 			return true;
 		}
 
-		public void RemoveModification(LegoIslandExe legoIsland, Backup backup)
+		public void RemoveModification(LegoIslandExe legoIsland, BackupExe backup)
 		{
 			foreach (long off in offsets)
 			{

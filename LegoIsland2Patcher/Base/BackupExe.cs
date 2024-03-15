@@ -2,12 +2,12 @@
 
 namespace LegoIsland2Patcher.Base
 {
-	public class Backup : LegoIslandExe
+	public class BackupExe : LegoIslandExe
 	{
-		public static Backup BackupLegoIsland(LegoIslandExe legoIsland)
+		public static BackupExe BackupLegoIsland(LegoIslandExe legoIsland)
 		{
 			string backupPath = Path.Combine("backup", legoIsland.Version.ExeName);
-			var backup = new Backup(legoIsland, backupPath);
+			var backup = new BackupExe(legoIsland, backupPath);
 
 			if (File.Exists(backupPath))
 			{
@@ -30,7 +30,7 @@ namespace LegoIsland2Patcher.Base
 
 		public LegoIslandExe Original { get; set; }
 
-		public Backup(LegoIslandExe legoIsland, string path) : base(legoIsland.Version, path)
+		public BackupExe(LegoIslandExe legoIsland, string path) : base(legoIsland.Version, path)
 		{
 			Original = legoIsland;
 		}

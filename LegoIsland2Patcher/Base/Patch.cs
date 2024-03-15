@@ -27,7 +27,7 @@ namespace LegoIsland2Patcher.Base
 			ApplyPatch(exe, bytes, offset, bytes.Length);
 		}
 
-		public static void RemovePatch(LegoIslandExe exe, Backup backup, long offset, int length)
+		public static void RemovePatch(LegoIslandExe exe, BackupExe backup, long offset, int length)
 		{
 			using var bck = backup.ReadFile();
 			using var fs = exe.WriteFile();
