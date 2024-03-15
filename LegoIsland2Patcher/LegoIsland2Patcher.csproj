@@ -62,14 +62,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AdminRights.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Mods\LoadFix.cs" />
+    <Compile Include="Mods\NoVideos.cs" />
     <Compile Include="Mods\Resolution.cs" />
-    <Compile Include="Base\Backup.cs" />
+    <Compile Include="Base\BackupExe.cs" />
     <Compile Include="Base\IModification.cs" />
     <Compile Include="Base\LegoIslandExe.cs" />
     <Compile Include="Base\Modification.cs" />

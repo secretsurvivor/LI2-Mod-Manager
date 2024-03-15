@@ -6,7 +6,6 @@ using System.Diagnostics;
 using static LegoIsland2Patcher.Utilities;
 using LegoIsland2Patcher.Base;
 using LegoIsland2Patcher.Mods;
-using System.Linq;
 
 namespace LegoIsland2Patcher
 {
@@ -16,7 +15,6 @@ namespace LegoIsland2Patcher
         {
             InitializeComponent();
         }
-
 
         LegoIslandExe LegoIsland { get; set; }
         BackupExe Backup { get; set; }

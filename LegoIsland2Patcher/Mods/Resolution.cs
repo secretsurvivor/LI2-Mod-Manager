@@ -50,11 +50,11 @@ namespace LegoIsland2Patcher.Mods
 
 			for (int i = 0; i < 4; i++)
 			{
-				Patch.ApplyPatch(legoIsland, BitConverter.GetBytes(Height), resOffsetH[i]);
-				Patch.ApplyPatch(legoIsland, BitConverter.GetBytes(Width), resOffsetW[i]);
+				Patch.ApplyPatch(legoIsland, BitConverter.GetBytes(Height), resOffsetH[i], 4);
+				Patch.ApplyPatch(legoIsland, BitConverter.GetBytes(Width), resOffsetW[i], 4);
 			}
 
-			Patch.ApplyPatch(legoIsland, BitConverter.GetBytes(customAspect), legoIsland.Version.FovOffset);
+			Patch.ApplyPatch(legoIsland, BitConverter.GetBytes(customAspect), legoIsland.Version.FovOffset, 4);
 		}
 
 		public void RemoveModification(LegoIslandExe legoIsland, BackupExe backup)

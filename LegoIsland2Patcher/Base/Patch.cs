@@ -6,20 +6,9 @@ namespace LegoIsland2Patcher.Base
 	{
 		public static void ApplyPatch(LegoIslandExe exe, byte[] bytes, long offset, int length)
 		{
-			// Length should be the same size as bytes[] assuming that its not another way of adding more 0 bytes at the end
-			// or limiting the size of bytes being written
-			if (bytes.Length < length)
-			{
-				return;
-			}
-
 			using var fs = exe.WriteFile();
 			fs.Seek(offset, SeekOrigin.Begin);
-
-			foreach (var item in bytes)
-			{
-				fs.WriteByte(item);
-			}
+			fs.Write(bytes, 0, length);
 		}
 
 		public static void ApplyPatch(LegoIslandExe exe, byte[] bytes, long offset)
@@ -33,12 +22,12 @@ namespace LegoIsland2Patcher.Base
 			using var fs = exe.WriteFile();
 
 			bck.Seek(offset, SeekOrigin.Begin);
-			fs.Seek(offset, SeekOrigin.Begin);
 
-			for (var i = 0; i < length; i++)
-			{
-				fs.WriteByte((byte)bck.ReadByte());
-			}
+			byte[] backupBytes = new byte[length];
+			bck.Read(backupBytes, 0, length);
+
+			fs.Seek(offset, SeekOrigin.Begin);
+			fs.Write(backupBytes, 0, length);
 		}
 	}
 }

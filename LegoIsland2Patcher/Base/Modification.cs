@@ -114,14 +114,7 @@ namespace LegoIsland2Patcher.Base
 		{
 			if (HasPatch)
 			{
-				using var fs = legoIsland.WriteFile();
-
-				fs.Seek(Offset, SeekOrigin.Begin);
-
-				foreach (var p in Patch)
-				{
-					fs.WriteByte(p);
-				}
+				Base.Patch.ApplyPatch(legoIsland, Patch, Offset);
 			}
 
 			if (HasData)
@@ -134,15 +127,7 @@ namespace LegoIsland2Patcher.Base
 		{
 			if (HasPatch)
 			{
-				using var fs = legoIsland.WriteFile();
-				using var bck = backup.ReadFile();
-
-				fs.Seek(Offset, SeekOrigin.Begin);
-
-				for (int i = 0; i < Patch.Length; i++)
-				{
-					fs.WriteByte((byte)bck.ReadByte());
-				}
+				Base.Patch.RemovePatch(legoIsland, backup, Offset, Patch.Length);
 			}
 
 			if (HasData)
